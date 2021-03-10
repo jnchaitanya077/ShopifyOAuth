@@ -71,6 +71,3 @@ router.get("/callback", async (req, res) => {
 
 module.exports = router;
 
-// custom compass app
-// API_KEY=abcc9de2cb03524253c62fd8e94c5bc6
-// API_SECRET=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

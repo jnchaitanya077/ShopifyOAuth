@@ -6,11 +6,15 @@ const router = new express.Router();
 
 router.get("/products", async (req, res) => {
     let shop = req.query.shop;
+    let requiredFields = req.body.fields;
+    let requiredIds = req.body.id;
+    console.log(requiredFields, requiredIds)
+
     if (shop) {
         try {
-            const products = await repository.getProductsFromStore(shop);
-            console.log(products.products)
-            res.send(products.products);
+            const products = await repository.getProductsFromStore(shop, requiredFields, requiredIds);
+            console.log(products);
+            res.send(products);
 
         } catch (error) {
             res.send(error);

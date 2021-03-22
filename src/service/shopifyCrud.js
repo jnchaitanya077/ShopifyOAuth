@@ -2,28 +2,39 @@ const repository = require("./databaseClient")
 const axios = require('axios');
 const { head } = require("../api/app");
 
-async function getProductsFromStore(store) {
+function generateProductsUrl(store, requiredFields, requiredIds) {
+    console.log("entered");
+
+    if (requiredFields && requiredIds) return `https://${store}/admin/api/2021-01/products/${requiredIds}.json?fields=${requiredFields}`;
+    else if (requiredFields) return `https://${store}/admin/api/2021-01/products.json?fields=${requiredFields}`;
+    else if (requiredIds) return `https://${store}/admin/api/2021-01/products.json?ids=${requiredIds}`;
+    else return `https://${store}/admin/api/2021-01/products.json`;
+
+}
+
+async function getProductsFromStore(store, requiredFields, requiredIds) {
     let { accessToken } = await repository.getStoreAccessToken(store);
     console.log(`crud repo: ${accessToken}`);
+    let url = generateProductsUrl(store, requiredFields, requiredIds);
+    console.log(url);
+
     const headers = {
         'Content-Type': 'application/json',
         'X-Shopify-Access-Token': accessToken,
+        'X-Shopify-Api-Features': 'include-presentment-prices'
     };
     try {
         const products = await axios({
             method: 'get',
-            url: `https://${store}/admin/api/2021-01/products.json`,
+            url: url,
             headers: headers,
         });
-        console.log(products.data);
         return products.data;
 
     } catch (error) {
         console.log(error);
         return { message: "Something went wrong." };
     }
-
-
 }
 
 async function createProduct(productDetails, store) {

@@ -23,7 +23,7 @@ router.get("/install", async (req, res) => {
             apiKey: process.env.API_KEY,
             sharedSecret: process.env.SECRET,
             scopes: "write_products,read_products,write_orders,read_customers",
-            redirectUri: "http://localhost:8000/callback",
+            redirectUri: "https://beeea8288f14.ngrok.io/callback",
             nonce: nonce,
             accessMode: "pre-user"
         });
@@ -70,4 +70,5 @@ router.get("/callback", async (req, res) => {
 
 
 module.exports = router;
+
 
